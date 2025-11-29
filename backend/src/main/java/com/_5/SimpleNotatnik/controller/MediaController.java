@@ -3,6 +3,8 @@ package com._5.SimpleNotatnik.controller;
 import com._5.SimpleNotatnik.dto.MediaDto;
 import com._5.SimpleNotatnik.model.Media;
 import com._5.SimpleNotatnik.repository.MediaRepository;
+import com._5.SimpleNotatnik.services.S3Service;
+import com.amazonaws.services.s3.model.S3Object;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class MediaController {
 
    private final MediaRepository mediaRepository;
+   private final S3Service s3;
 
    @GetMapping
    public List<MediaDto> getAllMedia() {
@@ -38,7 +41,7 @@ public class MediaController {
          .modifiedDate(request.getModifiedDate())
          .build();
 
-      Media saved = mediaRepository.save(media);
+      mediaRepository.save(media);
       return ResponseEntity.ok(media.getId());
    }
 
@@ -49,8 +52,7 @@ public class MediaController {
          throw new IllegalArgumentException("There is no such Media element in database with id = " + id);
       }
       final Media media = mediaOpt.get();
-      media.setData(file.getBytes());
-      media.setFilename(file.getName());
+      media.setFilename(s3.uploadFile(file,id));
       media.setContentType(file.getContentType());
       return ResponseEntity.ok(toDto(mediaRepository.save(media)));
    }
@@ -59,11 +61,17 @@ public class MediaController {
    public ResponseEntity<byte[]> downloadMedia(@PathVariable Long id) {
       return mediaRepository.findById(id)
          .map(m -> {
-            String contentType = m.getContentType() == null ? "application/octet-stream" : m.getContentType();
-            return ResponseEntity.ok()
-               .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + (m.getFilename() == null ? "file" : m.getFilename()) + "\"")
-               .contentType(MediaType.parseMediaType(contentType))
-               .body(m.getData());
+            S3Object picture = s3.downloadFile(m.getFilename(),id);
+            try {
+               return ResponseEntity.ok()
+                  .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + (m.getFilename() == null ? "file" : m.getFilename()) + "\"")
+                  .contentType(MediaType.parseMediaType(picture.getObjectMetadata()
+                     .getContentType())
+                  )
+                  .body(picture.getObjectContent().readAllBytes());
+            } catch (IOException e) {
+               throw new RuntimeException(e);
+            }
          })
          .orElse(ResponseEntity.notFound().build());
    }

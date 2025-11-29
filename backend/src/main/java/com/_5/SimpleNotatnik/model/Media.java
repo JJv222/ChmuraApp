@@ -30,9 +30,6 @@ public class Media {
 
     private String contentType;
 
-    @Column(name = "data", columnDefinition = "bytea")
-    private byte[] data;
-
     @PrePersist
     protected void onCreate() {
         this.creationDate = LocalDateTime.now();
