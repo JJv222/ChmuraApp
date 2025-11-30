@@ -1,4 +1,4 @@
-package com._5.SimpleNotatnik.model;
+package com.SimpleNotatnik.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -6,12 +6,12 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "media")
+@Table(name = "notes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Media {
+public class Note {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +26,6 @@ public class Media {
 
     private LocalDateTime modifiedDate;
 
-    private String filename;
-
-    private String contentType;
-
     @PrePersist
     protected void onCreate() {
         this.creationDate = LocalDateTime.now();
@@ -41,3 +37,4 @@ public class Media {
         this.modifiedDate = LocalDateTime.now();
     }
 }
+

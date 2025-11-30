@@ -1,4 +1,4 @@
-package com._5.SimpleNotatnik.dto;
+package com.SimpleNotatnik.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,13 +11,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MediaDto {
+public class NoteDto {
     private Long id;
     private String title;
     private String description;
     private LocalDateTime creationDate;
     private LocalDateTime modifiedDate;
-    private String filename;
-    private String contentType;
 }
 

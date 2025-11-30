@@ -1,4 +1,4 @@
-package com._5.SimpleNotatnik;
+package com.SimpleNotatnik;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

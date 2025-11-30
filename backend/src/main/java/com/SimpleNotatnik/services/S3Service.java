@@ -1,4 +1,4 @@
-package com._5.SimpleNotatnik.services;
+package com.SimpleNotatnik.services;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;

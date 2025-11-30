@@ -1,6 +1,6 @@
-package com._5.SimpleNotatnik.repository;
+package com.SimpleNotatnik.repository;
 
-import com._5.SimpleNotatnik.model.Note;
+import com.SimpleNotatnik.model.Note;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

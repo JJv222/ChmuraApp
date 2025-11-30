@@ -1,4 +1,4 @@
-package com._5.SimpleNotatnik.config;
+package com.SimpleNotatnik.config;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;

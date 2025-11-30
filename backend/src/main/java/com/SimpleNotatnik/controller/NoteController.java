@@ -1,8 +1,8 @@
-package com._5.SimpleNotatnik.controller;
+package com.SimpleNotatnik.controller;
 
-import com._5.SimpleNotatnik.dto.NoteDto;
-import com._5.SimpleNotatnik.model.Note;
-import com._5.SimpleNotatnik.repository.NoteRepository;
+import com.SimpleNotatnik.dto.NoteDto;
+import com.SimpleNotatnik.model.Note;
+import com.SimpleNotatnik.repository.NoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

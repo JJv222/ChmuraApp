@@ -1,9 +1,9 @@
-package com._5.SimpleNotatnik.controller;
+package com.SimpleNotatnik.controller;
 
-import com._5.SimpleNotatnik.dto.MediaDto;
-import com._5.SimpleNotatnik.model.Media;
-import com._5.SimpleNotatnik.repository.MediaRepository;
-import com._5.SimpleNotatnik.services.S3Service;
+import com.SimpleNotatnik.dto.MediaDto;
+import com.SimpleNotatnik.model.Media;
+import com.SimpleNotatnik.repository.MediaRepository;
+import com.SimpleNotatnik.services.S3Service;
 import com.amazonaws.services.s3.model.S3Object;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -52,7 +52,7 @@ public class MediaController {
          throw new IllegalArgumentException("There is no such Media element in database with id = " + id);
       }
       final Media media = mediaOpt.get();
-      media.setFilename(s3.uploadFile(file,id));
+      media.setFilename(s3.uploadFile(file, id));
       media.setContentType(file.getContentType());
       return ResponseEntity.ok(toDto(mediaRepository.save(media)));
    }
@@ -61,7 +61,7 @@ public class MediaController {
    public ResponseEntity<byte[]> downloadMedia(@PathVariable Long id) {
       return mediaRepository.findById(id)
          .map(m -> {
-            S3Object picture = s3.downloadFile(m.getFilename(),id);
+            S3Object picture = s3.downloadFile(m.getFilename(), id);
             try {
                return ResponseEntity.ok()
                   .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + (m.getFilename() == null ? "file" : m.getFilename()) + "\"")
