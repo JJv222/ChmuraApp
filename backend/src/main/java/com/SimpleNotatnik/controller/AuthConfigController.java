@@ -1,10 +1,13 @@
 package com.SimpleNotatnik.controller;
 
 import com.SimpleNotatnik.dto.AuthConfigDto;
+import com.SimpleNotatnik.dto.CognitoLoginRequest;
+import com.SimpleNotatnik.dto.CognitoLoginResponse;
+import com.SimpleNotatnik.services.CognitoAuthService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth-config")
@@ -35,5 +38,22 @@ public class AuthConfigController {
       dto.setScope(scope);
       dto.setResponseType("code");
       return dto;
+   }
+
+   private final CognitoAuthService cognitoAuthService;
+
+   public AuthConfigController(CognitoAuthService cognitoAuthService) {
+      this.cognitoAuthService = cognitoAuthService;
+   }
+
+   @PostMapping("/login")
+   public ResponseEntity<?> login(@RequestBody CognitoLoginRequest request) {
+      try {
+         CognitoLoginResponse resp = cognitoAuthService.login(request.username(), request.password());
+         return ResponseEntity.ok(resp);
+      } catch (RuntimeException ex) {
+         // tu możesz rozróżniać komunikaty jeśli chcesz
+         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+      }
    }
 }
